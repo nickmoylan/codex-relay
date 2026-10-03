@@ -1,5 +1,7 @@
 # Codex Relay
 
+[![CI](https://github.com/nickmoylan/codex-relay/actions/workflows/ci.yml/badge.svg)](https://github.com/nickmoylan/codex-relay/actions/workflows/ci.yml)
+
 Give Codex a bounded coding task to hand off, and a result you can review.
 
 Relay is a small Rust CLI and local MCP server. Your Codex coordinator assigns a named worker profile, supplies an isolated worktree and sets the limits. Relay records progress, runs the assigned checks and returns changed paths, hashes and blockers. You keep planning, review and integration in Codex.
@@ -26,11 +28,12 @@ You give a worker explicit writable paths, acceptance criteria and test argument
 | Durable jobs, cancellation and descendant cleanup | Safe Muse subscription authentication |
 | Scope checks, time/output limits and one correction | Upstream provider/model route receipts |
 | Built-in simulation and installed-binary smoke | Live harness images and provider credentials |
-| Docker containment and restricted HTTPS synthetic checks | Independent security review and hosted CI |
+| Docker containment and restricted HTTPS synthetic checks | Native Linux-host Docker daemon integration |
+| Hosted macOS/Linux core CI and reconciled independent QA | Live-provider handoff and harness review |
 
 ## Quick start
 
-Use a source checkout with Rust **1.97+**, Git, Python **3.9+** and [RTK](https://github.com/rtk-ai/rtk#installation). CLI builds and installed MCP smoke tests pass on Apple Silicon macOS and Linux ARM64 in an isolated container. Native Linux hosts and x86-64 remain untested locally; the hosted macOS/Linux CI matrix is prepared. Relay finds RTK in the Homebrew/system locations `/opt/homebrew/bin`, `/usr/local/bin` or `/usr/bin`. Workers use a separately reviewed local Docker runtime; see [runtime setup](docs/runtime.md).
+Use a source checkout with Rust **1.97+**, Git, Python **3.9+** and [RTK](https://github.com/rtk-ai/rtk#installation). CLI builds and installed MCP smoke tests pass on Apple Silicon macOS and Linux ARM64 in an isolated container. The hosted macOS15 and Ubuntu24.04 core CI jobs also pass; native Linux-host Docker daemon integration remains unverified. Relay finds RTK in the Homebrew/system locations `/opt/homebrew/bin`, `/usr/local/bin` or `/usr/bin`. Workers use a separately reviewed local Docker runtime; see [runtime setup](docs/runtime.md).
 
 ```sh
 rtk proxy cargo build --release --locked
@@ -90,6 +93,6 @@ rtk proxy cargo build --release --locked
 rtk proxy python3 scripts/smoke.py --binary target/release/codex-relay
 ```
 
-The native containment test is opt-in; passing simulation does not prove it. CI configuration is prepared, with no hosted run claimed. [Release guidance](docs/release.md) covers source packaging, upgrades, rollback and uninstall.
+The native containment test is opt-in; passing simulation does not prove it. Hosted macOS/Linux CI passes formatting, strict Clippy, the core suite, release build, installed smoke, installer tests and source packaging. [Release guidance](docs/release.md) covers source packaging, upgrades, rollback and uninstall.
 
 [MIT licensed](LICENSE). No crates.io publication is configured.

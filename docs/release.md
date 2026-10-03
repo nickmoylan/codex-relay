@@ -1,6 +1,6 @@
 # Release readiness
 
-The core supports a verified experimental source install on macOS and Linux ARM64. A production release for live providers remains blocked by independent review and provider handoff gates.
+The core supports a verified experimental source install on macOS and Linux ARM64. Hosted macOS15 and Ubuntu24.04 core CI passes, and the independent QA findings are closed. A production release for live providers remains blocked by provider handoff and review of the actual live harness.
 
 | Area | Status | Release requirement |
 | --- | --- | --- |
@@ -8,13 +8,13 @@ The core supports a verified experimental source install on macOS and Linux ARM6
 | Source package and prefix installer | Locally verified | Fresh public archive built/tested on Linux; both platforms pass install, replace, rollback and uninstall. |
 | Native containment | Blocked: `setsid()` succeeds | Stronger process containment and complete denied-access/detachment proof. |
 | Docker containment | Seven real synthetic tests pass | macOS host / Linux daemon: denied host access, copy quarantine, success/cancel/timeout/orphan cleanup, interrupted-import reservations, HTTPS allow/deny. |
-| Independent security review | Pending | Reconcile review of containment, copy-back, subprocesses and the minimal CONNECT/SNI broker before live use. |
+| Independent QA | Findings closed at the reviewed code checkpoint | Review actual live harness, credential and routing changes before live use. |
 | Muse authentication | Blocked | Safe subscription/session handoff and billing proof. |
 | Aider/provider routes/privacy | Untested | Pin versions and run an authorized public-data smoke. |
-| Hosted CI | Prepared, unrun | Inspect the first hosted result after approved publication. |
-| macOS/Linux CLI | Local macOS and isolated Linux ARM64 builds pass | Native Linux host and x86-64 untested locally; hosted matrix remains unrun. |
-| License | MIT selected | Canonical LICENSE and Cargo metadata agree. |
-| Public publication | Approval pending | Approve the exact public files and publication scope. |
+| Hosted CI | Both macOS15 and Ubuntu24.04 core jobs pass | [Verified source publication run](https://github.com/nickmoylan/codex-relay/actions/runs/37088479106); check CI for each subsequent commit. |
+| macOS/Linux CLI | Local macOS, isolated Linux ARM64 and hosted macOS/Linux core gates pass | Native Linux-host Docker daemon integration remains unverified. |
+| License | MIT; source-only dependency audit passed | All 88 dependencies reviewed. Binary/image distribution still needs applicable upstream notices. |
+| Public source | Published on main | [Source repository](https://github.com/nickmoylan/codex-relay); no tags, binary releases or registry packages. |
 
 ## Package and release gate
 
@@ -24,7 +24,7 @@ rtk proxy python3 scripts/package_source.py --output dist/codex-relay-source.tar
 
 The allowlisted archive excludes machine config, private patches, local integration, state and build output. It includes source, tests, examples, docs, a portable skill and scripts, with a SHA-256 sidecar and manifest. Review it before publication. No binary release, registry, signing or automatic publication is configured; Cargo has `publish = false`.
 
-The owner selected MIT. Preserve LICENSE and review dependency licenses before distribution. Run format, Clippy, the complete suite, release build, installed smoke and fresh archive installation checks. An ignored native test is not verified containment. Live release also needs authentication/privacy/billing proof and independent review.
+The owner selected MIT. Preserve LICENSE. The source-only dependency audit passed; review upstream notice obligations before distributing binaries or images. Run format, Clippy, the complete suite, release build, installed smoke and fresh archive installation checks. An ignored native test is not verified containment. Live release also needs authentication/privacy/billing proof and independent review.
 
 ## Upgrade, rollback and uninstall
 
