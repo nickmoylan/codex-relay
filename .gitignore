@@ -1,0 +1,11 @@
+/target/
+/.worker-state/
+/integration/
+/VERIFICATION.md
+/scripts/install_integration.py
+/local-config.json
+/config.json
+/.release/
+/dist/
+__pycache__/
+*.pyc

@@ -1,0 +1,41 @@
+name: Core checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  core:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Toolchain and RTK
+        run: |
+          rustup toolchain install 1.97.1 --profile minimal --component rustfmt --component clippy
+          rustup default 1.97.1
+          cargo install --root "$RUNNER_TEMP/rtk" --git https://github.com/rtk-ai/rtk.git --rev fde0a8f185945556f51718de0f4c430bb62b3df6 --locked rtk
+          sudo install "$RUNNER_TEMP/rtk/bin/rtk" /usr/local/bin/rtk
+      - name: Format and lint
+        run: |
+          rtk proxy cargo fmt --all -- --check
+          rtk proxy cargo clippy --all-targets --locked -- -D warnings
+      - name: Core tests and release build
+        run: |
+          rtk proxy cargo test --locked
+          rtk proxy cargo build --release --locked
+      - name: Installed binary smoke
+        run: |
+          rtk proxy python3 tests/install_contract.py
+          rtk proxy python3 scripts/install.py --prefix "$RUNNER_TEMP/relay-install"
+          rtk proxy python3 scripts/smoke.py --binary "$RUNNER_TEMP/relay-install/bin/codex-relay"
+          rtk proxy python3 scripts/install.py --prefix "$RUNNER_TEMP/relay-install" --replace
+          rtk proxy python3 scripts/install.py --prefix "$RUNNER_TEMP/relay-install" --rollback
+          rtk proxy python3 scripts/install.py --prefix "$RUNNER_TEMP/relay-install" --uninstall
+      - name: Public source archive
+        run: rtk proxy python3 scripts/package_source.py --output dist/codex-relay-source.tar.gz

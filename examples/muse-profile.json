@@ -1,0 +1,16 @@
+{
+  "enabled": false,
+  "harness": "muse",
+  "executable": "/usr/local/bin/muse",
+  "provider": "meta",
+  "model": "muse-spark-1.3",
+  "reasoning": "high",
+  "tools": ["file_read", "file_edit", "shell"],
+  "capabilities": {"code_editing": true, "reasoning": true, "tool_use": true},
+  "privacy": {"confidential_code": true, "data_collection": "deny", "zero_data_retention": false, "allowed_providers": [], "allow_fallbacks": false},
+  "budget": {"timeout_seconds": 900, "max_model_steps": 20, "max_output_bytes": 1048576, "max_change_bytes": 1048576, "max_cost_usd": null},
+  "credential_env": [],
+  "api_base": null,
+  "network_hosts": [],
+  "runtime_read_roots": ["/opt/homebrew/Cellar", "/opt/homebrew/lib"]
+}

@@ -1,0 +1,8 @@
+# Send only build source, never local integration, state, credentials or patches.
+**
+!Cargo.toml
+!Cargo.lock
+!src/
+!src/**
+!containers/
+!containers/Dockerfile
